@@ -1,0 +1,197 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// Prisma Schema
+
+// Hello World root endpoint
+model Hello {
+  uuid    String @id @unique
+  message String
+}
+
+// Simple User model
+// TODO enrich this schema using Clerk.com model
+model Users {
+  uuid     String     @id @default(uuid())
+  name     String
+  email    String     @unique
+  accounts Accounts[]
+}
+
+// Yapily API calls meta data
+model Meta {
+  uuid         String         @id @default(uuid())
+  tracingId    String
+  count        Int
+  accounts     Accounts[]
+  transactions Transactions[]
+}
+
+// Start of the Accounts Data Model
+model Accounts {
+  uuid                   String                  @id @default(uuid())
+  id                     String
+  userId                 String
+  type                   String
+  balance                Float
+  currency               String
+  usageType              String
+  accountType            String
+  nickname               String
+  metaId                 String
+  accountNames           AccountName[]
+  accountIdentifications AccountIdentification[]
+  accountBalances        AccountBalance[]
+  Meta                   Meta                    @relation(fields: [metaId], references: [uuid])
+  user                   Users                   @relation(fields: [userId], references: [uuid])
+}
+
+model AccountName {
+  uuid      String   @id @default(uuid())
+  name      String
+  accountId String
+  account   Accounts @relation(fields: [accountId], references: [uuid])
+}
+
+model AccountIdentification {
+  uuid           String   @id @default(uuid())
+  type           String
+  identification String
+  accountId      String
+  account        Accounts @relation(fields: [accountId], references: [uuid])
+}
+
+model AccountBalance {
+  uuid               String   @id @default(uuid())
+  type               String
+  dateTime           DateTime
+  amount             Float
+  currency           String
+  creditLineIncluded Boolean
+  accountId          String
+  account            Accounts @relation(fields: [accountId], references: [uuid])
+}
+
+// Start of the Transactions data model
+
+model Transactions {
+  uuid                             String                          @id @default(uuid())
+  id                               String
+  date                             DateTime
+  bookingDateTime                  DateTime
+  valueDateTime                    DateTime
+  status                           String
+  amount                           Float
+  currency                         String
+  transactionAmount                TransactionAmount?
+  reference                        String
+  description                      String
+  transactionInformation           TransactionInformation[]
+  isoBankTransactionCode           IsoBankTransactionCode?
+  proprietaryBankTransactionCode   ProprietaryBankTransactionCode?
+  balance                          Balance?
+  enrichment                       Enrichment?
+  Meta                             Meta                            @relation(fields: [metaId], references: [uuid])
+  metaId                           String
+  link                             Links?                          @relation(fields: [linkId], references: [uuid])
+  linkId                           String                          @unique
+}
+
+model TransactionInformation {
+  uuid          String       @id @default(uuid())
+  text          String
+  transactionId String
+  transaction   Transactions @relation(fields: [transactionId], references: [uuid])
+}
+
+model TransactionAmount {
+  uuid     String         @id @default(uuid())
+  amount   Float
+  currency String
+  transactionId String @unique
+  transaction     Transactions @relation(fields: [transactionId], references: [uuid])
+}
+
+// TODO all of those seem to be lookups that should not be re-inserted with each call, but rather re-used
+
+model IsoBankTransactionCode {
+  uuid            String         @id @default(uuid())
+  transactionId   String         @unique
+  transaction     Transactions   @relation(fields: [transactionId], references: [uuid])
+  domainCode      DomainCode?    @relation(fields: [domainCodeId], references: [uuid])
+  domainCodeId    String         @unique
+  familyCode      FamilyCode?    @relation(fields: [familyCodeId], references: [uuid])
+  familyCodeId    String         @unique
+  subFamilyCode   SubFamilyCode? @relation(fields: [subFamilyCodeId], references: [uuid])
+  subFamilyCodeId String         @unique
+}
+
+model DomainCode {
+  uuid                       String                  @id @default(uuid())
+  code                       String
+  name                       String
+  isoBrankTransactionCode    IsoBankTransactionCode?
+}
+
+model FamilyCode {
+  uuid                       String                  @id @default(uuid())
+  code                       String
+  name                       String
+  isoBrankTransactionCode    IsoBankTransactionCode?
+}
+
+model SubFamilyCode {
+  uuid                    String                  @id @default(uuid())
+  code                    String
+  name                    String
+  isoBrankTransactionCode IsoBankTransactionCode?
+}
+
+model ProprietaryBankTransactionCode {
+  uuid          String       @id @default(uuid())
+  code          String
+  issuer        String
+  transactionId String       @unique
+  transaction   Transactions @relation(fields: [transactionId], references: [uuid])
+}
+
+model Balance {
+  uuid          String       @id @default(uuid())
+  type          String
+  amount        Float
+  currency      String
+  transactionId String       @unique
+  transaction   Transactions @relation(fields: [transactionId], references: [uuid])
+}
+
+model Enrichment {
+  uuid              String          @id @default(uuid())
+  transactionHash   TransactionHash @relation(fields: [transactionHashId], references: [uuid])
+  transactionHashId String          @unique
+  transaction       Transactions    @relation(fields: [transactionId], references: [uuid])
+  transactionId     String          @unique
+}
+
+model TransactionHash {
+  uuid       String      @id @default(uuid())
+  hash       String
+  enrichment Enrichment?
+}
+
+model Links {
+  uuid        String        @id @default(uuid())
+  self        String
+  transaction Transactions?
+}
