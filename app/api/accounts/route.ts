@@ -1,19 +1,38 @@
-// export const dynamic = 'force-dynamic' // defaults to auto
-
-import { NextApiRequest, NextApiResponse } from "next";
 import { DB } from "@/app/db";
 import { NextRequest, NextResponse } from "next/server";
 
-// export const dynamic = "force-dynamic"; // defaults to auto
+// Mock user authentication
+async function auth() {
+  const user = await DB.users.findFirst();
 
-// Export to handle supported method GET
-export async function GET(req: NextRequest) {
+  const userId = user?.uuid ?? null;
 
-    const data = await DB.hello.findMany({
-      where: { id: "1" },
-    });
+  return userId;
+}
 
-    const res = data;
+// ! Route must be protected using Auth service as per https://clerk.com/docs/references/nextjs/route-handlers
 
-  return NextResponse.json(res);
+export async function GET() {
+
+  const userId = await auth();
+
+  if (!userId) {
+    return new Response("Unauthorized", { status: 401 });
+  }
+  const data = await DB.accounts.findMany({
+    where: {
+      userId: {
+        equals: userId,
+      },
+    },
+    include: {
+      accountNames: true,
+      accountBalances: true,
+      accountIdentifications: true,
+    }
+  });
+
+  console.log(data)
+
+  return NextResponse.json({ data });
 }

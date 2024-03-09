@@ -5,7 +5,8 @@
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["relationJoins"]
 }
 
 datasource db {
@@ -54,6 +55,7 @@ model Accounts {
   accountNames           AccountName[]
   accountIdentifications AccountIdentification[]
   accountBalances        AccountBalance[]
+  transactions           Transactions[]
   Meta                   Meta                    @relation(fields: [metaId], references: [uuid])
   user                   Users                   @relation(fields: [userId], references: [uuid])
 }
@@ -87,26 +89,28 @@ model AccountBalance {
 // Start of the Transactions data model
 
 model Transactions {
-  uuid                             String                          @id @default(uuid())
-  id                               String
-  date                             DateTime
-  bookingDateTime                  DateTime
-  valueDateTime                    DateTime
-  status                           String
-  amount                           Float
-  currency                         String
-  transactionAmount                TransactionAmount?
-  reference                        String
-  description                      String
-  transactionInformation           TransactionInformation[]
-  isoBankTransactionCode           IsoBankTransactionCode?
-  proprietaryBankTransactionCode   ProprietaryBankTransactionCode?
-  balance                          Balance?
-  enrichment                       Enrichment?
-  Meta                             Meta                            @relation(fields: [metaId], references: [uuid])
-  metaId                           String
-  link                             Links?                          @relation(fields: [linkId], references: [uuid])
-  linkId                           String                          @unique
+  uuid                           String                          @id @default(uuid())
+  id                             String
+  date                           DateTime
+  bookingDateTime                DateTime
+  valueDateTime                  DateTime
+  status                         String
+  amount                         Float
+  currency                       String
+  transactionAmount              TransactionAmount?
+  reference                      String
+  description                    String
+  transactionInformation         TransactionInformation[]
+  isoBankTransactionCode         IsoBankTransactionCode?
+  proprietaryBankTransactionCode ProprietaryBankTransactionCode?
+  balance                        Balance?
+  enrichment                     Enrichment?
+  Meta                           Meta                            @relation(fields: [metaId], references: [uuid])
+  metaId                         String
+  link                           Links?                          @relation(fields: [linkId], references: [uuid])
+  linkId                         String                          @unique
+  accountId                      String
+  account                        Accounts                        @relation(fields: [accountId], references: [uuid])
 }
 
 model TransactionInformation {
@@ -117,11 +121,11 @@ model TransactionInformation {
 }
 
 model TransactionAmount {
-  uuid     String         @id @default(uuid())
-  amount   Float
-  currency String
-  transactionId String @unique
-  transaction     Transactions @relation(fields: [transactionId], references: [uuid])
+  uuid          String       @id @default(uuid())
+  amount        Float
+  currency      String
+  transactionId String       @unique
+  transaction   Transactions @relation(fields: [transactionId], references: [uuid])
 }
 
 // TODO all of those seem to be lookups that should not be re-inserted with each call, but rather re-used
@@ -139,17 +143,17 @@ model IsoBankTransactionCode {
 }
 
 model DomainCode {
-  uuid                       String                  @id @default(uuid())
-  code                       String
-  name                       String
-  isoBrankTransactionCode    IsoBankTransactionCode?
+  uuid                    String                  @id @default(uuid())
+  code                    String
+  name                    String
+  isoBrankTransactionCode IsoBankTransactionCode?
 }
 
 model FamilyCode {
-  uuid                       String                  @id @default(uuid())
-  code                       String
-  name                       String
-  isoBrankTransactionCode    IsoBankTransactionCode?
+  uuid                    String                  @id @default(uuid())
+  code                    String
+  name                    String
+  isoBrankTransactionCode IsoBankTransactionCode?
 }
 
 model SubFamilyCode {

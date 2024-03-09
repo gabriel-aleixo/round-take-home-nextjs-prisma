@@ -14,6 +14,11 @@ async function main() {
     },
   });
 
+  // Initialize accountId var to link Transactions to Account
+  // as these are separate endpoints on Yapily API
+
+  let accountId: string = '';
+
   // Iterate over the imported accounts data
   for (const accountData of accounts) {
     // Create entry for meta data first
@@ -25,7 +30,8 @@ async function main() {
     });
     // For each account, create it with nested relations
     for (const account of accountData.Accounts) {
-      await prisma.accounts.create({
+
+      const newAccount = await prisma.accounts.create({
         data: {
           metaId: newAccountData.uuid,
           userId: user.uuid, // Attaching all accounts to the example user
@@ -55,8 +61,13 @@ async function main() {
           },
         },
       });
+
+      // Store this account's uuid to link transactions
+      accountId = newAccount.uuid;
     }
   }
+
+  console.log("Account ID ", accountId);
 
   //   Iterate over imported transactions data
   for (const transactionData of transactions) {
@@ -75,10 +86,12 @@ async function main() {
 
     // For each transaction, create it with nested relations
     for (let transaction of transactionData.data)
+
       await prisma.transactions.create({
         data: {
           metaId: newTransactionMetaData.uuid,
           linkId: newTransactionLinkData.uuid,
+          accountId: accountId,
           id: transaction.id,
           date: new Date(transaction.date),
           bookingDateTime: new Date(transaction.bookingDateTime),

@@ -1,6 +1,5 @@
 // export const dynamic = 'force-dynamic' // defaults to auto
 
-import { NextApiRequest, NextApiResponse } from "next";
 import { DB } from "@/app/db";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -10,7 +9,7 @@ import { NextRequest, NextResponse } from "next/server";
 export async function GET(req: NextRequest) {
 
     const data = await DB.hello.findUnique({
-      where: { id: "1" },
+      where: { uuid: "1" },
     });
 
     const res = data?.message;
