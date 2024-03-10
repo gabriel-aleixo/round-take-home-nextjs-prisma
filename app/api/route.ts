@@ -18,4 +18,4 @@ export async function GET(req: NextRequest) {
 };
 
 // TODO handle methods that are not allowed
-// TODO only allow API requests from authenticated users
+// TODO only allow API requests from authenticated users (use server session?)
