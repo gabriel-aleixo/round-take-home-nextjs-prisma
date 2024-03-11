@@ -15,6 +15,7 @@ datasource db {
 }
 
 // Prisma Schema
+// ! The model is missing the "Consents" data from Yapily, which carries the institution ID
 
 // Hello World root endpoint
 model Hello {
