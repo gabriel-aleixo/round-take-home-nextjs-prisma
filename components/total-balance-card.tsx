@@ -33,7 +33,7 @@ export function TotalBalanceCard() {
                 Total Account Balance
             </CardDescription>
           <CardTitle>
-            {accountsBalance} GBP
+            {new Intl.NumberFormat("en-UK", { style: "currency", currency: "GBP"} ).format(accountsBalance)}
           </CardTitle>
         </CardHeader>
       </Card>

@@ -44,5 +44,49 @@ export const accounts = [
             ]
           }
         ]
+      },
+      {
+        "meta": {
+          "tracingId": "1139346006be4345a94fd8b3728844e4",
+          "count": 1
+        },
+        "Accounts": [
+          {
+            "id": "700004000000000000000003",
+            "type": "Business - Current",
+            "balance": 100000,
+            "currency": "GBP",
+            "usageType": "BUSINESS",
+            "accountType": "CURRENT",
+            "nickname": "xxxx0003",
+            "accountNames": [
+              {
+                "name": "Mr. Roberto Rastapopoulos & Ivan Sakharine"
+              }
+            ],
+            "accountIdentifications": [
+              {
+                "type": "SORT_CODE",
+                "identification": "700003"
+              },
+              {
+                "type": "ACCOUNT_NUMBER",
+                "identification": "70000004"
+              }
+            ],
+            "accountBalances": [
+              {
+                "type": "EXPECTED",
+                "dateTime": "2021-06-09T08:51:02.463Z",
+                "balanceAmount": {
+                  "amount": 100000,
+                  "currency": "GBP"
+                },
+                "creditLineIncluded": false,
+                "creditLines": []
+              }
+            ]
+          }
+        ]
       }
 ]

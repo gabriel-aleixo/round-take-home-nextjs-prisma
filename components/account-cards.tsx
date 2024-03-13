@@ -34,11 +34,11 @@ export function AccountCards() {
         {accounts.length > 0 &&
           accounts.map((account, index) => (
             //   console.log(account.nickname, index)
-            <Card className="w-[300px]" key={index}>
+            <Card key={index}>
               <CardHeader>
                 <CardDescription>{account.type}</CardDescription>
                 <CardTitle>
-                  {account.balance} {account.currency}
+                {new Intl.NumberFormat("en-UK", { style: "currency", currency: account.currency} ).format(account.balance)}
                 </CardTitle>
               </CardHeader>
               <CardContent>{account.nickname}</CardContent>
