@@ -23,10 +23,6 @@ This project is a proof of concept for a personal finance dashboard that aggrega
 - Implements responsive design using Tailwind CSS.
 - Utilizes TypeScript for type-safe coding practices.
 
-## Demo
-
-Watch the demo video of the project here: [Demo Video](https://youtu.be/iSYg3JriDNU?si=iQnq5ga0z4zwFwP6)
-
 ## Assumptions and comments
 
 - The Prisma schema is missing the "Consents" data from Yapily, which would carry the institution ID. Currently, there's no info about the account's institution.
