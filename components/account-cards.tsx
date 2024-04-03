@@ -38,7 +38,10 @@ export function AccountCards() {
               <CardHeader>
                 <CardDescription>{account.type}</CardDescription>
                 <CardTitle>
-                {new Intl.NumberFormat("en-UK", { style: "currency", currency: account.currency} ).format(account.balance)}
+                  {new Intl.NumberFormat("en-UK", {
+                    style: "currency",
+                    currency: account.currency,
+                  }).format(account.balance)}
                 </CardTitle>
               </CardHeader>
               <CardContent>{account.nickname}</CardContent>

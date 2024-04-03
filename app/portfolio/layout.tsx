@@ -3,8 +3,8 @@ import Sidebar from "@/components/layout/sidebar";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Round Dashboard",
-  description: "Round Take Home Task - Gabriel Aleixo",
+  title: "Finances Dashboard",
+  description: "Proof of Concept - Gabriel Aleixo",
 };
 
 export default function DashboardLayout({

@@ -21,6 +21,11 @@ export function RecentTransactions() {
 
         const transactionsData = await getTransactions();
 
+        transactionsData.sort(
+          (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
+        );
+        // transactionsData.sort();
+
         setTransactions(transactionsData);
         setLoading(false);
         // console.log(transactions)

@@ -18,7 +18,6 @@ import { getCurrentUser } from "@/lib/session";
 import { useEffect, useState } from "react";
 
 export function UserNav() {
-
   const initUser: User = {
     uuid: "",
     name: "",
