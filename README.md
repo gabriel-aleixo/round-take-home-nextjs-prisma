@@ -1,5 +1,7 @@
 # Finances Dashboard Demo Project
 
+This project is a proof of concept for a personal finance dashboard that aggregates data from accounts in various financial institutions using the Yapily API.
+
 ## Tech Stack
 
 - Next.js
